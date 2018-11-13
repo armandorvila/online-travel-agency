@@ -1,2 +1,1 @@
-# ota-domain
-Small project showcasing a domain model for an OTA.
+# OTA Domain Sample
