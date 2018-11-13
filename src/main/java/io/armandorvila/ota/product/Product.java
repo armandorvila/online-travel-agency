@@ -25,17 +25,31 @@ public class Product {
 	@Getter
 	private Money basePrice;
 
-	public Money calculatePrice(List<DiscountCriteria> discounts) {
+	/**
+	 * Based on the base price of this product, and the discount criteria applied,
+	 * this methods calculate the price returning the final price.
+	 * 
+	 * @param discountsToApply Discount Criteria that must be considered for the
+	 *                         final price.
+	 * 
+	 * @return a new Money instance with the final price.
+	 * 
+	 * <p>
+	 * NOTE:This logic can be extracted to a service, if we decide to go for
+	 * an anemic domain "approach":https://www.martinfowler.com/bliki/AnemicDomainModel.html
+	 * </p>
+	 */
+	public Money calculatePrice(List<DiscountCriteria> discountsToApply) {
 		Money finalPrice = Money.of(basePrice.getNumber(), basePrice.getCurrency());
-		
-		for (DiscountCriteria discountCriteria : discounts) {
+
+		for (DiscountCriteria discountCriteria : discountsToApply) {
 			log.debug("Applying discount {} to product {}", discountCriteria.name(), this.getName());
-			
+
 			Money amount = Money.of(DISCOUNT_PER_CRITERIA, basePrice.getCurrency());
-			
-			finalPrice  = finalPrice.subtract(amount);
+
+			finalPrice = finalPrice.subtract(amount);
 		}
-		
+
 		return finalPrice;
 	}
 }
